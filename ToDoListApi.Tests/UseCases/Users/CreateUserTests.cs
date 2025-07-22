@@ -35,7 +35,7 @@ namespace ToDoListApi.Tests.UseCases.Users
         }
 
         [Test]
-        public void Create_User_ShouldThrowException_WhenEmailIsEmpty()
+        public void CreateUser_ShouldThrowException_WhenEmailIsEmpty()
         {
             // Arrange
             var userRepository = Substitute.For<IUserRepository>();
@@ -64,7 +64,7 @@ namespace ToDoListApi.Tests.UseCases.Users
             var request = new CreateUserRequest
             {
                 Email = "test@example.com",
-                Password = "" // inválido
+                Password = "" // invalid
             };
 
             // Act & Assert
