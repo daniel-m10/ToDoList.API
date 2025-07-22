@@ -15,34 +15,14 @@ namespace ToDoListApi.Application.UseCases.Users
 
         private static void Validate(CreateUserRequest request)
         {
-            if (request.Email == string.Empty)
+            if (string.IsNullOrWhiteSpace(request.Email))
             {
-                throw new ArgumentException("Email cannot be empty.");
+                throw new ArgumentException("Email cannot be null, empty, or whitespace.");
             }
 
-            if (request.Email is null)
+            if (string.IsNullOrWhiteSpace(request.Password))
             {
-                throw new ArgumentNullException(nameof(request), "Email cannot be null.");
-            }
-
-            if (request.Email is " ")
-            {
-                throw new ArgumentException("Email cannot be whitespace.");
-            }
-
-            if (request.Password == string.Empty)
-            {
-                throw new ArgumentException("Password cannot be empty.");
-            }
-
-            if (request.Password is null)
-            {
-                throw new ArgumentNullException(nameof(request), "Password cannot be null.");
-            }
-
-            if (request.Password is " ")
-            {
-                throw new ArgumentException("Password cannot be whitespace.");
+                throw new ArgumentException("Password cannot be null, empty, or whitespace.");
             }
         }
     }
