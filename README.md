@@ -19,3 +19,5 @@ ToDoListApi/
 ├── ToDoListApi.Api/              # Proyecto Web API (controladores)
 ├── ToDoListApi.Application/      # Lógica de negocio (dominio, casos de uso)
 └── ToDoListApi.Tests/            # Tests unitarios (NUnit)
+
+<!-- Trigger CI for status check -->
