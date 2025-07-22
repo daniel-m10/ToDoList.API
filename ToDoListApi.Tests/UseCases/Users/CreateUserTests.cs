@@ -48,10 +48,37 @@ namespace ToDoListApi.Tests.UseCases.Users
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be empty."));
+        }
+
+        [Test]
+        public void CreateUser_ShouldThrowException_WhenEmailIsNull()
+        {
+            // Arrange
+            var userRepository = Substitute.For<IUserRepository>();
+            var sut = new CreateUser(userRepository);
+            var request = new CreateUserRequest
             {
-                await sut.CreateUserAsync(request);
-            }, "Email cannot be empty.");
+                Email = null!, // invalid
+                Password = "Password123!"
+            };
+            // Act & Assert
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentNullException.With.Message.EqualTo("Email cannot be null. (Parameter 'request')"));
+        }
+
+        [Test]
+        public void CreateUser_ShouldThrowException_WhenEmailIsWhitespace()
+        {
+            // Arrange
+            var userRepository = Substitute.For<IUserRepository>();
+            var sut = new CreateUser(userRepository);
+            var request = new CreateUserRequest
+            {
+                Email = " ", // invalid
+                Password = "Password123!"
+            };
+            // Act & Assert
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be whitespace."));
         }
 
         [Test]
@@ -68,11 +95,39 @@ namespace ToDoListApi.Tests.UseCases.Users
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-            {
-                await sut.CreateUserAsync(request);
-            }, "Password cannot be empty.");
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be empty."));
         }
 
+        [Test]
+        public void CreateUser_ShouldThrowException_WhenPasswordIsNull()
+        {
+            // Arrange
+            var userRepository = Substitute.For<IUserRepository>();
+            var sut = new CreateUser(userRepository);
+            var request = new CreateUserRequest
+            {
+                Email = "test@example.com",
+                Password = null! // invalid
+            };
+
+            // Act & Assert
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentNullException.With.Message.EqualTo("Password cannot be null. (Parameter 'request')"));
+        }
+
+        [Test]
+        public void CreateUser_ShouldThrowException_WhenPasswordIsWhitespace()
+        {
+            // Arrange
+            var userRepository = Substitute.For<IUserRepository>();
+            var sut = new CreateUser(userRepository);
+            var request = new CreateUserRequest
+            {
+                Email = "test@example.com",
+                Password = " " // invalid
+            };
+
+            // Act & Assert
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be whitespace."));
+        }
     }
 }
