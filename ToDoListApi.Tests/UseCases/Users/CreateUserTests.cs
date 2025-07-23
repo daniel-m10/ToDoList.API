@@ -48,7 +48,7 @@ namespace ToDoListApi.Tests.UseCases.Users
             };
 
             // Act & Assert
-            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be null, empty, or whitespace. (Parameter 'Email')"));
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be null, empty, or whitespace."));
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace ToDoListApi.Tests.UseCases.Users
                 Password = "Password123!"
             };
             // Act & Assert
-            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be null, empty, or whitespace. (Parameter 'Email')"));
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be null, empty, or whitespace."));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace ToDoListApi.Tests.UseCases.Users
                 Password = "Password123!"
             };
             // Act & Assert
-            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be null, empty, or whitespace. (Parameter 'Email')"));
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Email cannot be null, empty, or whitespace."));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace ToDoListApi.Tests.UseCases.Users
             };
 
             // Act & Assert
-            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace. (Parameter 'Password')"));
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace."));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace ToDoListApi.Tests.UseCases.Users
             };
 
             // Act & Assert
-            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace. (Parameter 'Password')"));
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace."));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace ToDoListApi.Tests.UseCases.Users
             };
 
             // Act & Assert
-            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace. (Parameter 'Password')"));
+            Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace."));
         }
 
         private static IUserRepository UserRepository => Substitute.For<IUserRepository>();
