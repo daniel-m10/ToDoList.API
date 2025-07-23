@@ -19,5 +19,11 @@ namespace ToDoListApi.Application.Infrastructure
 
             return Task.FromResult(user);
         }
+
+        public Task<User?> GetUserByEmailAsync(string email)
+        {
+            _users.TryGetValue(email, out var user);
+            return Task.FromResult(user);
+        }
     }
 }
