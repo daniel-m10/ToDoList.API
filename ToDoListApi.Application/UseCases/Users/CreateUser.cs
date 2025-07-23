@@ -17,12 +17,12 @@ namespace ToDoListApi.Application.UseCases.Users
         {
             if (string.IsNullOrWhiteSpace(request.Email))
             {
-                throw new ArgumentException("Email cannot be empty.");
+                throw new ArgumentException("Email cannot be null, empty, or whitespace.");
             }
 
             if (string.IsNullOrWhiteSpace(request.Password))
             {
-                throw new ArgumentException("Password cannot be empty.");
+                throw new ArgumentException("Password cannot be null, empty, or whitespace.");
             }
         }
     }
