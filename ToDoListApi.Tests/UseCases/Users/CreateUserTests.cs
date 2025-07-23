@@ -148,6 +148,29 @@ namespace ToDoListApi.Tests.UseCases.Users
             Assert.That(async () => await sut.CreateUserAsync(request), Throws.ArgumentException.With.Message.EqualTo("Password cannot be null, empty, or whitespace."));
         }
 
+        [Test]
+        public void CreateUser_ShouldThrowException_WhenUserAlreadyExists()
+        {
+            // Arrange
+            var existingUser = new User("test@example.com", "hashed-password");
+            var userRepository = UserRepository;
+            userRepository.GetUserByEmailAsync(existingUser.Email).Returns(existingUser);
+
+            var hasher = new FakePasswordHasher();
+
+            var sut = new CreateUser(userRepository, hasher);
+
+            var request = new CreateUserRequest
+            {
+                Email = "test@example.com",
+                Password = "Secure123!"
+            };
+
+            // Act & Assert
+            Assert.That(async () => await sut.CreateUserAsync(request),
+                Throws.InvalidOperationException.With.Message.EqualTo("User with this email already exists."));
+        }
+
         private static IUserRepository UserRepository => Substitute.For<IUserRepository>();
 
         private static IPasswordHasher PasswordHasher => new FakePasswordHasher();
