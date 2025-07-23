@@ -13,6 +13,13 @@ namespace ToDoListApi.Application.UseCases.Users
         {
             Validate(request);
 
+            var existingUser = await _userRepository.GetUserByEmailAsync(request.Email);
+
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException("User with this email already exists.");
+            }
+
             var passwordHash = _hasher.Hash(request.Password);
             var user = new User(request.Email, passwordHash);
 
