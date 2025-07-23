@@ -1,16 +1,24 @@
 ﻿using ToDoListApi.Application.DTOs;
+using ToDoListApi.Application.Entities;
 using ToDoListApi.Application.Interfaces;
 
 namespace ToDoListApi.Application.UseCases.Users
 {
-    public class CreateUser(IUserRepository userRepository) : IUserService
+    public class CreateUser(IUserRepository userRepository, IPasswordHasher hasher) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
+        private readonly IPasswordHasher _hasher = hasher;
 
         public async Task<Guid> CreateUserAsync(CreateUserRequest request)
         {
             Validate(request);
-            return await _userRepository.CreateUserAsync(request.Email, request.Password);
+
+            var passwordHash = _hasher.Hash(request.Password);
+            var user = new User(request.Email, passwordHash);
+
+            var createdUser = await _userRepository.CreateUserAsync(user);
+
+            return createdUser.Id;
         }
 
         private static void Validate(CreateUserRequest request)

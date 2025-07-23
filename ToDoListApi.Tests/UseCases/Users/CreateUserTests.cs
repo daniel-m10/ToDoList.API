@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using ToDoListApi.Application.DTOs;
+using ToDoListApi.Application.Entities;
 using ToDoListApi.Application.Interfaces;
 using ToDoListApi.Application.UseCases.Users;
 
@@ -13,7 +14,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);   // System under test
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);   // System under test
 
             var request = new CreateUserRequest
             {
@@ -21,17 +24,21 @@ namespace ToDoListApi.Tests.UseCases.Users
                 Password = "Secure123!"
             };
 
-            var expectedUserId = Guid.NewGuid();
+            var user = new User(request.Email, passwordHasher.Hash(request.Password));
 
-            userRepository
-                .CreateUserAsync(request.Email, request.Password)
-                .Returns(expectedUserId);
+            userRepository.CreateUserAsync(Arg.Any<User>()).Returns(user);
 
             // Act
             var result = await sut.CreateUserAsync(request);
 
-            // Assert
-            Assert.That(result, Is.EqualTo(expectedUserId));
+            Assert.Multiple(() =>
+            {
+                // Assert
+                Assert.That(result, Is.EqualTo(user.Id));
+                Assert.That(user.Email, Is.EqualTo("test@example.com"));
+                Assert.That(user.PasswordHash, Is.EqualTo("hashed-Secure123!"));
+            });
+            await userRepository.Received(1).CreateUserAsync(Arg.Is<User>(u => u.Email == request.Email && u.PasswordHash == user.PasswordHash));
         }
 
         [Test]
@@ -39,7 +46,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);
 
             var request = new CreateUserRequest
             {
@@ -56,7 +65,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);
             var request = new CreateUserRequest
             {
                 Email = null!, // invalid
@@ -71,7 +82,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);
             var request = new CreateUserRequest
             {
                 Email = " ", // invalid
@@ -86,7 +99,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);
 
             var request = new CreateUserRequest
             {
@@ -103,7 +118,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);
             var request = new CreateUserRequest
             {
                 Email = "test@example.com",
@@ -119,7 +136,9 @@ namespace ToDoListApi.Tests.UseCases.Users
         {
             // Arrange
             var userRepository = UserRepository;
-            var sut = new CreateUser(userRepository);
+            var passwordHasher = PasswordHasher;
+
+            var sut = new CreateUser(userRepository, passwordHasher);
             var request = new CreateUserRequest
             {
                 Email = "test@example.com",
@@ -131,5 +150,7 @@ namespace ToDoListApi.Tests.UseCases.Users
         }
 
         private static IUserRepository UserRepository => Substitute.For<IUserRepository>();
+
+        private static IPasswordHasher PasswordHasher => new FakePasswordHasher();
     }
 }

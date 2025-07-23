@@ -1,7 +1,9 @@
-﻿namespace ToDoListApi.Application.Interfaces
+﻿using ToDoListApi.Application.Entities;
+
+namespace ToDoListApi.Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task<Guid> CreateUserAsync(string email, string password);
+        Task<User> CreateUserAsync(User user);
     }
 }
