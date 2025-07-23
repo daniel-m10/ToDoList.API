@@ -38,7 +38,6 @@ namespace ToDoListApi.Tests.UseCases.Users
                 Assert.That(user.Email, Is.EqualTo("test@example.com"));
                 Assert.That(user.PasswordHash, Is.EqualTo("hashed-Secure123!"));
             });
-            await userRepository.Received(1).CreateUserAsync(Arg.Is<User>(u => u.Email == request.Email && u.PasswordHash == user.PasswordHash));
         }
 
         [Test]

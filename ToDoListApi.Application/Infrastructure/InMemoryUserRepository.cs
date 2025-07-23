@@ -15,7 +15,6 @@ namespace ToDoListApi.Application.Infrastructure
                 throw new ArgumentException("User with this email already exists.");
             }
 
-            var userId = Guid.NewGuid();
             _users[user.Email] = user;
 
             return Task.FromResult(user);
