@@ -33,12 +33,7 @@ namespace ToDoListApi.Tests.UseCases.Auth
             var result = await sut.LoginAsync(request);
 
             // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(result, Is.EqualTo(user.Id));
-                Assert.That(user.Email, Is.EqualTo("test@example.com"));
-                Assert.That(user.PasswordHash, Is.EqualTo(hashedPassword));
-            });
+            Assert.That(result, Is.EqualTo(user.Id));
         }
 
         [Test]
@@ -63,7 +58,7 @@ namespace ToDoListApi.Tests.UseCases.Auth
         }
 
         [Test]
-        public void LoginUser_ShouldThrowException_WHenPasswordDoesNotMatch()
+        public void LoginUser_ShouldThrowException_WhenPasswordDoesNotMatch()
         {
             // Arrange
             var userRepository = UserRepository;
